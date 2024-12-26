@@ -2,6 +2,24 @@ pipeline {
     agent any
 
     stages {
+        stage('Verify Environment') {
+            steps {
+                sh 'echo $PATH'
+            }
+        }
+
+        stage('Verify kubectl') {
+            steps {
+                sh 'kubectl version'
+            }
+        }
+
+        stage('Verify Workspace') {
+            steps {
+                sh 'ls -l'
+            }
+        }
+
         stage('Checkout Code') {
             steps {
                 git branch: 'main', url: 'https://github.com/inudzuka-mitsu/pr-project'
@@ -10,31 +28,17 @@ pipeline {
 
         stage('Create Kubernetes Resources') {
             steps {
-                sh '''
-                echo "Applying pod.yaml..."
-                kubectl apply -f pod.yaml
-                '''
-
-                sh '''
-                echo "Applying service.yaml..."
-                kubectl apply -f service.yaml
-                '''
-
-                sh '''
-                echo "Applying ingress.yaml..."
-                kubectl apply -f ingress.yaml
-                '''
+                sh '/usr/local/bin/kubectl apply -f pod.yaml'
+                sh '/usr/local/bin/kubectl apply -f service.yaml'
+                sh '/usr/local/bin/kubectl apply -f ingress.yaml'
             }
         }
 
         stage('Verify Resources') {
             steps {
-                sh '''
-                echo "Verifying Kubernetes resources..."
-                kubectl get pods
-                kubectl get svc
-                kubectl get ingress
-                '''
+                sh '/usr/local/bin/kubectl get pods'
+                sh '/usr/local/bin/kubectl get svc'
+                sh '/usr/local/bin/kubectl get ingress'
             }
         }
     }
@@ -45,12 +49,9 @@ pipeline {
         }
         failure {
             echo 'Failed to create Kubernetes resources.'
-            sh '''
-            echo "Dumping logs for debugging..."
-            kubectl describe pods
-            kubectl describe svc
-            kubectl describe ingress
-            '''
+            sh '/usr/local/bin/kubectl describe pods'
+            sh '/usr/local/bin/kubectl describe svc'
+            sh '/usr/local/bin/kubectl describe ingress'
         }
     }
 }
