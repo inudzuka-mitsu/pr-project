@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-hello-pod
+  labels:
+    app: nginx-hello
+spec:
+  containers:
+    - name: nginx-hello-container
+      image: nginxdemos/hello
+      ports:
+        - containerPort: 80
