@@ -17,7 +17,7 @@ pipeline {
                 sh '''
                 echo "Applying pod.yaml..."
                 export KUBECONFIG=$KUBE_CONFIG
-                kubectl apply -f pod.yaml
+                /usr/local/bin/kubectl apply -f pod.yaml
                 '''
 
                 sh '''
