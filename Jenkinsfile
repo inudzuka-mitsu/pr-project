@@ -12,19 +12,16 @@ pipeline {
             steps {
                 sh '''
                 echo "Applying pod.yaml..."
-                export KUBECONFIG=$KUBE_CONFIG
                 kubectl apply -f pod.yaml
                 '''
 
                 sh '''
                 echo "Applying service.yaml..."
-                export KUBECONFIG=$KUBE_CONFIG
                 kubectl apply -f service.yaml
                 '''
 
                 sh '''
                 echo "Applying ingress.yaml..."
-                export KUBECONFIG=$KUBE_CONFIG
                 kubectl apply -f ingress.yaml
                 '''
             }
@@ -34,7 +31,6 @@ pipeline {
             steps {
                 sh '''
                 echo "Verifying Kubernetes resources..."
-                export KUBECONFIG=$KUBE_CONFIG
                 kubectl get pods
                 kubectl get svc
                 kubectl get ingress
@@ -51,7 +47,6 @@ pipeline {
             echo 'Failed to create Kubernetes resources.'
             sh '''
             echo "Dumping logs for debugging..."
-            export KUBECONFIG=$KUBE_CONFIG
             kubectl describe pods
             kubectl describe svc
             kubectl describe ingress
