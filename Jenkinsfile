@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/your-username/your-repo-name.git'
+                git 'https://github.com/inudzuka-mitsu/pr-project'
             }
         }
 
