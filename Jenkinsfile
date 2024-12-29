@@ -4,6 +4,10 @@ pipeline {
             label 'agent01'
         }
     }
+    
+    environment {
+        KUBECONFIG = credentials('kubeconfig') 
+    }
 
     stages {
 
