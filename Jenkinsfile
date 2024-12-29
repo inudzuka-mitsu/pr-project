@@ -32,11 +32,12 @@ pipeline {
         stage('Auto Test') {
             steps {
                 script {
+                    def sleepTime = 10
                     def serviceHost = "nginx-hello.local"
                     def externalIP = "35.188.208.88"
 
                     echo "Testing service at: ${serviceHost} (IP: ${externalIP})"
-
+                    sleep(sleepTime)
                     def response = sh(
                         script: "curl -s -H 'Host: ${serviceHost}' http://${externalIP}",
                         returnStdout: true
