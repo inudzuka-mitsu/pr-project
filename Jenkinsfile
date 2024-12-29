@@ -32,23 +32,22 @@ pipeline {
         stage('Auto Test') {
             steps {
                 script {
-                    def namespace = "default"
                     def serviceHost = "nginx-hello.local"
-                    def externalIP = "<EXTERNAL-IP>"
+                    def externalIP = "35.188.208.88"
 
                     echo "Testing service at: ${serviceHost} (IP: ${externalIP})"
 
                     def response = sh(
-                        script: "curl -Is -H \"Host: ${serviceHost}\" http://${externalIP}",
+                        script: "curl -s -H 'Host: ${serviceHost}' http://${externalIP}",
                         returnStdout: true
                     ).trim()
 
                     echo "Response: ${response}"
 
-                    if (response.contains("HTTP/1.1 200 OK")) {
-                        echo "Service is accessible: It's OK"
+                    if (response.contains("Welcome to nginx!")) { 
+                        echo "Application is working as expected!"
                     } else {
-                        error "Service is not accessible: It's NOT OK"
+                        error "Application did not return the expected response."
                     }
                 }
             }
