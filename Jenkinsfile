@@ -44,7 +44,7 @@ pipeline {
 
                     echo "Response: ${response}"
 
-                    if (response.contains("Welcome to nginx!")) { 
+                    if (response.contains("Hello World!")) { 
                         echo "Application is working as expected!"
                     } else {
                         error "Application did not return the expected response."
