@@ -28,6 +28,31 @@ pipeline {
                 sh '/usr/local/bin/kubectl get ingress'
             }
         }
+
+        stage('Auto Test') {
+            steps {
+                script {
+                    def namespace = "default"
+                    def serviceHost = "nginx-hello.local"
+                    def externalIP = "<EXTERNAL-IP>"
+
+                    echo "Testing service at: ${serviceHost} (IP: ${externalIP})"
+
+                    def response = sh(
+                        script: "curl -Is -H \"Host: ${serviceHost}\" http://${externalIP}",
+                        returnStdout: true
+                    ).trim()
+
+                    echo "Response: ${response}"
+
+                    if (response.contains("HTTP/1.1 200 OK")) {
+                        echo "Service is accessible: It's OK"
+                    } else {
+                        error "Service is not accessible: It's NOT OK"
+                    }
+                }
+            }
+        }
     }
 
     post {
