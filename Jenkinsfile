@@ -52,14 +52,30 @@ pipeline {
                 }
             }
         }
+
+        stage('Clean Up Resources') {
+            when {
+                expression {
+                    currentBuild.result == null
+                }
+            }
+            steps {
+                echo "Deleting Kubernetes resources..."
+                sh '''
+                /usr/local/bin/kubectl delete -f ingress.yaml
+                /usr/local/bin/kubectl delete -f service.yaml
+                /usr/local/bin/kubectl delete -f pod.yaml
+                '''
+            }
+        }
     }
 
     post {
         success {
-            echo 'Kubernetes resources created successfully!'
+            echo 'Pipeline executed successfully and resources were deleted!'
         }
         failure {
-            echo 'Failed to create Kubernetes resources.'
+            echo 'Pipeline failed. Resources will not be deleted automatically.'
             sh '/usr/local/bin/kubectl describe pods'
             sh '/usr/local/bin/kubectl describe svc'
             sh '/usr/local/bin/kubectl describe ingress'
