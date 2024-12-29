@@ -6,23 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('Verify Environment') {
-            steps {
-                sh 'echo $PATH'
-            }
-        }
-
-        stage('Verify kubectl') {
-            steps {
-                sh 'kubectl version'
-            }
-        }
-
-        stage('Verify Workspace') {
-            steps {
-                sh 'ls -l'
-            }
-        }
 
         stage('Checkout Code') {
             steps {
