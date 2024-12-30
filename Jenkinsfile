@@ -51,7 +51,7 @@ pipeline {
                     echo "Running Cypress tests"
                     sh """
                     cd ${testDir}
-                    npx cypress run
+                    npx cypress run --headless
                     """
                 }
             }
