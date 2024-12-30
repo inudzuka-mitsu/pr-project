@@ -84,5 +84,8 @@ pipeline {
             sh '/usr/local/bin/kubectl describe svc'
             sh '/usr/local/bin/kubectl describe ingress'
         }
+        always {
+            cleanWs()
+        }
     }
 }
