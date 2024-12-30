@@ -44,14 +44,14 @@ pipeline {
                     sh """
                     rm -rf ${testDir}
                     git clone -b ${testBranch} ${testRepo} ${testDir}
+                    cd ${testDir}
+                    npm install
                     """
 
-                    echo "Running Cypress tests with Docker image: cypress/included"
+                    echo "Running Cypress tests"
                     sh """
-                    sudo docker run --rm \
-                    -v ${pwd()}/${testDir}:/e2e \
-                    -w /e2e \
-                    cypress/included:12.8.1 run
+                    cd ${testDir}
+                    npm cypress run
                     """
                 }
             }
