@@ -57,21 +57,21 @@ pipeline {
             }
         }
 
-        stage('Clean Up Resources') {
-            when {
-                expression {
-                    currentBuild.result == null
-                }
-            }
-            steps {
-                echo "Deleting Kubernetes resources..."
-                sh '''
-                /usr/local/bin/kubectl delete -f ingress.yaml
-                /usr/local/bin/kubectl delete -f service.yaml
-                /usr/local/bin/kubectl delete -f pod.yaml
-                '''
-            }
-        }
+        // stage('Clean Up Resources') {
+        //     when {
+        //         expression {
+        //             currentBuild.result == null
+        //         }
+        //     }
+        //     steps {
+        //         echo "Deleting Kubernetes resources..."
+        //         sh '''
+        //         /usr/local/bin/kubectl delete -f ingress.yaml
+        //         /usr/local/bin/kubectl delete -f service.yaml
+        //         /usr/local/bin/kubectl delete -f pod.yaml
+        //         '''
+        //     }
+        // }
     }
 
     post {
