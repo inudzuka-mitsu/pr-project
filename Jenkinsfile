@@ -36,24 +36,23 @@ pipeline {
         stage('Auto Test') {
             steps {
                 script {
-                    def sleepTime = 10
-                    def serviceHost = "nginx-hello.local"
-                    def externalIP = "35.188.208.88"
+                    def testRepo = 'https://github.com/inudzuka-mitsu/cypress-tests'
+                    def testBranch = 'master'
+                    def testDir = 'cypress-tests'
 
-                    echo "Testing service at: ${serviceHost} (IP: ${externalIP})"
-                    sleep(sleepTime)
-                    def response = sh(
-                        script: "curl -s -H 'Host: ${serviceHost}' http://${externalIP}",
-                        returnStdout: true
-                    ).trim()
+                    echo "Cloning Cypress test repository: ${testRepo}"
+                    sh """
+                    rm -rf ${testDir}
+                    git clone -b ${testBranch} ${testRepo} ${testDir}
+                    """
 
-                    echo "Response: ${response}"
-
-                    if (response.contains("Hello World")) { 
-                        echo "Application is working as expected!"
-                    } else {
-                        error "Application did not return the expected response."
-                    }
+                    echo "Running Cypress tests with Docker image: cypress/included"
+                    sh """
+                    docker run --rm \
+                    -v ${pwd()}/${testDir}:/e2e \
+                    -w /e2e \
+                    cypress/included:12.8.1 run
+                    """
                 }
             }
         }
