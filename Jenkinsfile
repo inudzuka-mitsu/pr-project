@@ -48,7 +48,7 @@ pipeline {
 
                     echo "Running Cypress tests with Docker image: cypress/included"
                     sh """
-                    docker run --rm \
+                    sudo docker run --rm \
                     -v ${pwd()}/${testDir}:/e2e \
                     -w /e2e \
                     cypress/included:12.8.1 run
