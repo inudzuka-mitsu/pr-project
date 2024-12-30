@@ -44,14 +44,15 @@ pipeline {
                     sh """
                     rm -rf ${testDir}
                     git clone -b ${testBranch} ${testRepo} ${testDir}
-                    cd ${testDir}
-                    npm install
                     """
 
                     echo "Running Cypress tests"
                     sh """
-                    cd ${testDir}
-                    CYPRESS_BROWSER_ARGS="--disable-gpu" npx cypress run --headless
+                    docker run --rm \
+                        -v \$(pwd)/${testDir}:/e2e \
+                        -w /e2e \
+                        cypress/base:16.20.2 \
+                        sh -c "npm install && npx cypress run --headless"
                     """
                 }
             }
