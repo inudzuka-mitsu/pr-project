@@ -51,7 +51,7 @@ pipeline {
                     echo "Running Cypress tests"
                     sh """
                     cd ${testDir}
-                    npx cypress run --headless --disable-gpu
+                    CYPRESS_BROWSER_ARGS="--disable-gpu" npx cypress run --headless
                     """
                 }
             }
