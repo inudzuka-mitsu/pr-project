@@ -49,6 +49,7 @@ pipeline {
                     echo "Running Cypress tests"
                     sh """
                     docker run --rm \
+                        --add-host nginx-hello.local:35.188.208.88
                         -v \$(pwd)/${testDir}:/e2e \
                         -w /e2e \
                         cypress/base:22.12.0 \
