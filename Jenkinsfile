@@ -51,7 +51,7 @@ pipeline {
                     docker run --rm \
                         -v \$(pwd)/${testDir}:/e2e \
                         -w /e2e \
-                        cypress/base:node16 \
+                        cypress/base:22.12.0 \
                         sh -c "npm install && npx cypress run --headless"
                     """
                 }
