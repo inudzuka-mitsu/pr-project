@@ -36,44 +36,39 @@ pipeline {
         stage('Auto Test') {
             steps {
                 script {
-                    def testRepo = 'https://github.com/inudzuka-mitsu/cypress-tests'
-                    def testBranch = 'master'
-                    def testDir = 'cypress-tests'
-
-                    echo "Cloning Cypress test repository: ${testRepo}"
-                    sh """
-                    rm -rf ${testDir}
-                    git clone -b ${testBranch} ${testRepo} ${testDir}
-                    """
-
-                    echo "Running Cypress tests"
-                    sh """
-                    docker run --rm \
-                        --add-host nginx-hello.local:35.188.208.88 \
-                        -v \$(pwd)/${testDir}:/e2e \
-                        -w /e2e \
-                        cypress/base:22.12.0 \
-                        sh -c "npm install && npx cypress run --headless"
-                    """
+                    def namespace = "default"
+                    def serviceHost = "nginx-hello.local"
+                    def externalIP = "<EXTERNAL-IP>"
+                    echo "Testing service at: ${serviceHost} (IP: ${externalIP})"
+                    def response = sh(
+                        script: "curl -Is -H \"Host: ${serviceHost}\" http://${externalIP}",
+                        returnStdout: true
+                    ).trim()
+                    echo "Response: ${response}"
+                    if (response.contains("HTTP/1.1 200 OK")) {
+                        echo "Service is accessible: It's OK"
+                    } else {
+                        error "Service is not accessible: It's NOT OK"
+                    }
                 }
             }
         }
 
-        // stage('Clean Up Resources') {
-        //     when {
-        //         expression {
-        //             currentBuild.result == null
-        //         }
-        //     }
-        //     steps {
-        //         echo "Deleting Kubernetes resources..."
-        //         sh '''
-        //         /usr/local/bin/kubectl delete -f ingress.yaml
-        //         /usr/local/bin/kubectl delete -f service.yaml
-        //         /usr/local/bin/kubectl delete -f pod.yaml
-        //         '''
-        //     }
-        // }
+        stage('Clean Up Resources') {
+            when {
+                expression {
+                    currentBuild.result == null
+                }
+            }
+            steps {
+                echo "Deleting Kubernetes resources..."
+                sh '''
+                /usr/local/bin/kubectl delete -f ingress.yaml
+                /usr/local/bin/kubectl delete -f service.yaml
+                /usr/local/bin/kubectl delete -f pod.yaml
+                '''
+            }
+        }
     }
 
     post {
