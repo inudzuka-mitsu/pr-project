@@ -19,17 +19,17 @@ pipeline {
 
         stage('Create Kubernetes Resources') {
             steps {
-                sh '/usr/local/bin/kubectl apply -f pod.yaml'
-                sh '/usr/local/bin/kubectl apply -f service.yaml'
-                sh '/usr/local/bin/kubectl apply -f ingress.yaml'
+                sh 'kubectl apply -f pod.yaml'
+                sh 'kubectl apply -f service.yaml'
+                sh 'kubectl apply -f ingress.yaml'
             }
         }
 
         stage('Verify Resources') {
             steps {
-                sh '/usr/local/bin/kubectl get pods'
-                sh '/usr/local/bin/kubectl get svc'
-                sh '/usr/local/bin/kubectl get ingress'
+                sh 'kubectl get pods'
+                sh 'kubectl get svc'
+                sh 'kubectl get ingress'
             }
         }
 
@@ -63,9 +63,9 @@ pipeline {
             steps {
                 echo "Deleting Kubernetes resources..."
                 sh '''
-                /usr/local/bin/kubectl delete -f ingress.yaml
-                /usr/local/bin/kubectl delete -f service.yaml
-                /usr/local/bin/kubectl delete -f pod.yaml
+                kubectl delete -f ingress.yaml
+                kubectl delete -f service.yaml
+                kubectl delete -f pod.yaml
                 '''
             }
         }
@@ -77,9 +77,9 @@ pipeline {
         }
         failure {
             echo 'Pipeline failed. Resources will not be deleted automatically.'
-            sh '/usr/local/bin/kubectl describe pods'
-            sh '/usr/local/bin/kubectl describe svc'
-            sh '/usr/local/bin/kubectl describe ingress'
+            sh 'kubectl describe pods'
+            sh 'kubectl describe svc'
+            sh 'kubectl describe ingress'
         }
         always {
             cleanWs()
