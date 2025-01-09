@@ -7,7 +7,7 @@ pipeline {
     
     environment {
         KUBECONFIG = credentials('kubeconfig') 
-        PATH = "${PATH}:/home/ubuntu/google-cloud-sdk/bin" // Adjust path as necessary
+        PATH = "${PATH}:/home/ubuntu/google-cloud-sdk/bin"
         USE_GKE_GCLOUD_AUTH_PLUGIN = 'True'
     }
 
@@ -47,7 +47,7 @@ pipeline {
                 script {
                     def namespace = "default"
                     def serviceHost = "nginx-hello.local"
-                    def externalIP = "<EXTERNAL-IP>"
+                    def externalIP = "35.188.208.88"
                     echo "Testing service at: ${serviceHost} (IP: ${externalIP})"
                     def response = sh(
                         script: "curl -Is -H \"Host: ${serviceHost}\" http://${externalIP}",
