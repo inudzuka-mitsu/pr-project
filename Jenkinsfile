@@ -45,6 +45,7 @@ pipeline {
         stage('Auto Test') {
             steps {
                 script {
+                    sleep(time: 10, unit: 'SECONDS')
                     def namespace = "default"
                     def serviceHost = "nginx-hello.local"
                     def externalIP = "34.59.218.101"
