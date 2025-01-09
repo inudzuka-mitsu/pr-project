@@ -19,17 +19,17 @@ pipeline {
 
         stage('Create Kubernetes Resources') {
             steps {
-                sh '/home/ubuntu/google-cloud-sdk/bin/kubectl apply -f pod.yaml'
-                sh '/home/ubuntu/google-cloud-sdk/bin/kubectl apply -f service.yaml'
-                sh '/home/ubuntu/google-cloud-sdk/bin/kubectl apply -f ingress.yaml'
+                sh 'kubectl apply -f pod.yaml'
+                sh 'kubectl apply -f service.yaml'
+                sh 'kubectl apply -f ingress.yaml'
             }
         }
 
         stage('Verify Resources') {
             steps {
-                sh '/home/ubuntu/google-cloud-sdk/bin/kubectl get pods'
-                sh '/home/ubuntu/google-cloud-sdk/bin/kubectl get svc'
-                sh '/home/ubuntu/google-cloud-sdk/bin/kubectl get ingress'
+                sh 'kubectl get pods'
+                sh 'kubectl get svc'
+                sh 'kubectl get ingress'
             }
         }
 
