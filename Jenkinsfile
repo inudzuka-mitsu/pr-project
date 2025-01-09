@@ -47,7 +47,7 @@ pipeline {
                 script {
                     def namespace = "default"
                     def serviceHost = "nginx-hello.local"
-                    def externalIP = "35.188.208.88"
+                    def externalIP = "34.59.218.101"
                     echo "Testing service at: ${serviceHost} (IP: ${externalIP})"
                     def response = sh(
                         script: "curl -Is -H \"Host: ${serviceHost}\" http://${externalIP}",
