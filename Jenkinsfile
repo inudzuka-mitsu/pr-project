@@ -7,9 +7,18 @@ pipeline {
     
     environment {
         KUBECONFIG = credentials('kubeconfig') 
+        PATH = "${PATH}:/home/ubuntu/google-cloud-sdk/bin" // Adjust path as necessary
+        USE_GKE_GCLOUD_AUTH_PLUGIN = 'True'
     }
 
     stages {
+
+        stage('Verify Environment') {
+            steps {
+                sh 'echo $PATH'
+                sh 'which gke-gcloud-auth-plugin || echo "Plugin not found in PATH"'
+            }
+        }
 
         stage('Checkout Code') {
             steps {
@@ -77,9 +86,9 @@ pipeline {
         }
         failure {
             echo 'Pipeline failed. Resources will not be deleted automatically.'
-            sh 'kubectl describe pods'
-            sh 'kubectl describe svc'
-            sh 'kubectl describe ingress'
+            sh 'kubectl describe pods || echo "Failed to describe pods"'
+            sh 'kubectl describe svc || echo "Failed to describe services"'
+            sh 'kubectl describe ingress || echo "Failed to describe ingress"'
         }
         always {
             cleanWs()
